@@ -1,0 +1,8 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">VozNick Android</string>
+    <string name="check_internet_connection">Please, check your Internet connection</string>
+    <string name="re_try">Re-try</string>
+    <string name="ok_label" tools:ignore="ButtonCase,Typos">Ok</string>
+    <string name="is_empty">%s can not be empty</string>
+    <string name="not_valid">%s not valid</string>
+</resources>
