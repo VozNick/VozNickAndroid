@@ -3,19 +3,11 @@ package com.vmm408.voznickandroid.ui.global
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Color
 import android.graphics.Point
-import android.text.SpannableStringBuilder
-import android.text.method.LinkMovementMethod
-import android.text.style.ForegroundColorSpan
-import android.text.style.URLSpan
-import android.text.style.UnderlineSpan
-import android.util.TypedValue
 import android.view.Display
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.text.inSpans
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
@@ -27,11 +19,13 @@ const val STATE_SCOPE_NAME = "state_scope_name"
 
 const val API_INTERNET_ERROR = "api_internet_error"
 const val API_SERVER_ERROR = "api_server_error"
+
 var userToken: String? = null
-fun String.sha256(): String {
-    val md = MessageDigest.getInstance("SHA256")
-    return BigInteger(1, md.digest(toByteArray())).toString(16).padStart(32, '0')
-}
+
+fun String.sha256(): String =
+    BigInteger(1, MessageDigest.getInstance("SHA256").digest(toByteArray()))
+        .toString(16)
+        .padStart(32, '0')
 
 fun String?.isPasswordValid(): Boolean = Pattern.compile(
     "^" +
@@ -55,13 +49,11 @@ fun getStatusBarHeight(context: Context): Int {
 fun getScreenHeight(activity: Activity?): Int = getScreenSize(activity).y
 fun getScreenWidth(activity: Activity?): Int = getScreenSize(activity).x
 
-fun TextView.setLineSpacingCustom(activity: Activity?) {
+fun TextView.setLineSpacingCustom(activity: Activity?) =
     setLineSpacing((getScreenSize(activity).y * 0.001).toFloat(), 1.0f)
-}
 
-fun EditText.setLineSpacingCustom(activity: Activity?) {
+fun EditText.setLineSpacingCustom(activity: Activity?) =
     setLineSpacing((getScreenSize(activity).y * 0.001).toFloat(), 1.0f)
-}
 
 private fun getScreenSize(activity: Activity?): Point {
     val display: Display? = activity?.windowManager?.defaultDisplay
@@ -73,28 +65,35 @@ private fun getScreenSize(activity: Activity?): Point {
 val Int.dp: Int
     get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
-
 val Float.dp: Int
     get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
+val Int.sp: Int
+    get() = (this / Resources.getSystem().displayMetrics.scaledDensity).toInt()
 
-fun showToast(context: Context?, text: String) {
+val Float.sp: Int
+    get() = (this / Resources.getSystem().displayMetrics.scaledDensity).toInt()
+
+
+fun showToast(context: Context?, text: String) =
     Toast.makeText(context, text, Toast.LENGTH_LONG).show()
-}
 
-fun String?.setFormat(outFormat: String, inFormat: String = "yyyy-MM-dd HH:mm:ss"): String =
-    SimpleDateFormat(outFormat, Locale.getDefault()).format(
-        SimpleDateFormat(inFormat, Locale.getDefault()).parse(this ?: "") ?: ""
+fun String.setToDate(inFormat: String? = null): Date? =
+    formatter(inFormat).parse(this)
+
+fun Date.setToStringFormat(outFormat: String? = null): String =
+    formatter(outFormat).format(this)
+
+fun Long.setToStringFormat(outFormat: String? = null): String =
+    formatter(outFormat).format(Date(this))
+
+fun String?.changeFormat(outFormat: String, inFormat: String? = null): String =
+    formatter(outFormat).format(
+        formatter(inFormat).parse(this ?: "") ?: ""
     )
 
-fun String?.setToDate(inFormat: String = "yyyy-MM-dd HH:mm:ss"): Date? =
-    SimpleDateFormat(inFormat, Locale.getDefault()).parse(this ?: "")
-
-fun Date?.setToSimpleFormat(outFormat: String = "yyyy-MM-dd HH:mm:ss"): String =
-    SimpleDateFormat(outFormat, Locale.getDefault()).format(this ?: Date()) ?: ""
-
-fun Long.setToSimpleFormat(outFormat: String = "yyyy-MM-dd HH:mm:ss"): String =
-    SimpleDateFormat(outFormat, Locale.getDefault()).format(Date(this)) ?: ""
+fun formatter(pattern: String? = "yyyy-MM-dd HH:mm:ss") =
+    SimpleDateFormat(pattern, Locale.getDefault())
 
 fun randomInt() = Random(Calendar.getInstance().timeInMillis).nextInt()
 
@@ -113,21 +112,3 @@ fun randomInt() = Random(Calendar.getInstance().timeInMillis).nextInt()
 //    }
 //}
 
-fun TextView?.initPrivacyText() {
-    this?.text = SpannableStringBuilder()
-        .append("By signing in, you accept to our ")
-        .inSpans(
-            URLSpan("https://limebee.pino.pp.ua/terms-and-conditions"),
-            UnderlineSpan(),
-            ForegroundColorSpan(Color.parseColor("#65B120"))
-        ) { append("Privacy Policy") }
-        .append(" and ")
-        .inSpans(
-            URLSpan("https://limebee.pino.pp.ua/privacy-policy"),
-            UnderlineSpan(),
-            ForegroundColorSpan(Color.parseColor("#65B120"))
-        ) { append("Terms of Services") }
-        .append(".")
-    this?.linksClickable = true
-    this?.movementMethod = LinkMovementMethod.getInstance()
-}

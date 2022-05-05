@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
 
-    <com.vmm408.voznickandroid.ui.main.nav1.hrzone.HrZoneProgressBarFragment
+    <com.vmm408.voznickandroid.ui.global.widgets.HrZoneProgressBarFragment
         android:id="@+id/hrZoneProgressBar"
         android:layout_width="match_parent"
         android:layout_height="15dp"
@@ -21,17 +22,28 @@
         android:layout_marginTop="40dp"
         android:orientation="vertical" />
 
-    <TextView
-        android:id="@+id/nextCellButton"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="40dp"
-        android:gravity="center"
-        android:text="Next cell"
-        android:textColor="@color/black"
-        android:textSize="18sp" />
+        <TextView
+            android:id="@+id/nextCellButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="40dp"
+            android:gravity="center"
+            android:text="Next cell"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+<!--    <com.vmm408.voznickandroid.ui.global.widgets.ActionButton-->
+<!--        android:id="@+id/nextCellButton"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="48dp"-->
+<!--        android:layout_marginStart="40dp"-->
+<!--        android:layout_marginTop="40dp"-->
+<!--        android:layout_marginEnd="40dp"-->
+<!--        app:cardBackgroundColor="#9CE91E63"-->
+<!--        app:cardCornerRadius="100dp"-->
+<!--        app:text="Next cell" />-->
 
     <TextView
         android:id="@+id/clearAllCellsButton"

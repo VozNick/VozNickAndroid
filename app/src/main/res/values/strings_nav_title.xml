@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="nav_1_title">Nav1</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="nav_1_title" tools:ignore="Typos">Nav1</string>
     <string name="nav_2_title">Nav2</string>
     <string name="nav_3_title">Nav3</string>
     <string name="nav_4_title">Nav4</string>

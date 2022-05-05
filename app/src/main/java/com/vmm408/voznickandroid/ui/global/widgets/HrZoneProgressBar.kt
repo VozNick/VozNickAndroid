@@ -1,4 +1,4 @@
-package com.vmm408.voznickandroid.ui.main.nav1.hrzone
+package com.vmm408.voznickandroid.ui.global.widgets
 
 import android.content.Context
 import android.graphics.Color
@@ -63,7 +63,7 @@ class HrZoneProgressBarFragment : LinearLayout {
             ?.setBackgroundColor(Color.parseColor(hrZone.zoneColor))
     }
 
-    fun addCell(hrZone: HrZone? = null) {
+    private fun addCell(hrZone: HrZone? = null) {
         View(context)
             .apply {
                 if (null != hrZone) setBackgroundColor(Color.parseColor(hrZone.zoneColor))

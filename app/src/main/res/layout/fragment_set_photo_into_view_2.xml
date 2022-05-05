@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <view
+        android:id="@+id/imageContainer"
+        class="com.makeramen.roundedimageview.RoundedImageView"
+        android:layout_width="172dp"
+        android:layout_height="172dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/ic_user_avatar_skeleton_grey_76"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.128"
+        app:layout_optimizationLevel="ratio"
+        app:riv_border_color="#E4E6E9"
+        app:riv_border_width="1dp"
+        app:riv_mutate_background="true"
+        app:riv_oval="true" />
+
+    <TextView
+        android:id="@+id/openCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="Open Camera"
+        app:layout_constraintEnd_toEndOf="@+id/imageContainer"
+        app:layout_constraintStart_toStartOf="@+id/imageContainer"
+        app:layout_constraintTop_toBottomOf="@+id/imageContainer" />
+
+    <TextView
+        android:id="@+id/openGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="Open Gallery"
+        app:layout_constraintEnd_toEndOf="@+id/imageContainer"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="@+id/imageContainer"
+        app:layout_constraintTop_toBottomOf="@+id/openCamera" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

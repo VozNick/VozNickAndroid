@@ -18,8 +18,8 @@ class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener,
     private val adapter: ViewPagerAdapter = ViewPagerAdapter(supportFragmentManager).apply {
         addFragment(Screens.getNav1Host(), "")
         addFragment(Screens.getNav2Host(), "")
-        addFragment(Screens.getNav3Host(), "")
-        addFragment(Screens.getNav4Host(), "")
+//        addFragment(Screens.getNav3Host(), "")
+//        addFragment(Screens.getNav4Host(), "")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +56,24 @@ class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener,
                         }
                         hostViewPager?.currentItem = 0
                     }
+                    R.id.nav2Host -> {
+                        if (hostViewPager?.currentItem == 1) {
+                            sfm.popBackStack()
+                        }
+                        hostViewPager?.currentItem = 1
+                    }
+//                    R.id.nav3Host -> {
+//                        if (hostViewPager?.currentItem == 2) {
+//                            sfm.popBackStack()
+//                        }
+//                        hostViewPager?.currentItem = 2
+//                    }
+//                    R.id.nav4Host -> {
+//                        if (hostViewPager?.currentItem == 3) {
+//                            sfm.popBackStack()
+//                        }
+//                        hostViewPager?.currentItem = 3
+//                    }
                     else -> when (sfm.getBackStackEntryAt(sfm.backStackEntryCount - 1).name) {
 //                        HomeFragment().TAG -> {
 //                        }
@@ -78,6 +96,7 @@ class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener,
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav1 -> hostViewPager?.currentItem = 0
+            R.id.nav2 -> hostViewPager?.currentItem = 1
         }
         return true
     }

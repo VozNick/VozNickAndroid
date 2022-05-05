@@ -1,21 +1,19 @@
-package com.vmm408.voznickandroid.ui.main.nav1
+package com.vmm408.voznickandroid.ui.main.nav1.adgooglesignin
 
 import android.os.Bundle
 import android.view.View
 import com.vmm408.voznickandroid.R
-import com.vmm408.voznickandroid.ui.Screens
 import com.vmm408.voznickandroid.ui.global.BaseFragment
 
-class Nav1Host : BaseFragment() {
+class AddGoogleSignInFragment : BaseFragment() {
     companion object {
-        fun newInstance() = Nav1Host()
+        fun newInstance() = AddGoogleSignInFragment()
     }
 
-    override val layoutRes = R.layout.host_nav_1
-    override val TAG = "Nav1Host"
+    override val layoutRes = R.layout.fragment_add_google_sign_in
+    override val TAG = "AddGoogleSignInFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        replace(R.id.nav1Host, Screens.getHomeScreen())
     }
 }

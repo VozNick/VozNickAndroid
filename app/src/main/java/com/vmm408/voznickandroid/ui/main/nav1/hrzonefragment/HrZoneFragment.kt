@@ -1,13 +1,15 @@
-package com.vmm408.voznickandroid.ui.main.nav1.hrzone
+package com.vmm408.voznickandroid.ui.main.nav1.hrzonefragment
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.vmm408.voznickandroid.R
 import com.vmm408.voznickandroid.ui.global.BaseFragment
 import com.vmm408.voznickandroid.ui.global.dp
+import com.vmm408.voznickandroid.ui.global.widgets.HrZone
 import kotlinx.android.synthetic.main.fragment_hr_zone.*
 
 class HrZoneFragment : BaseFragment() {
@@ -18,9 +20,8 @@ class HrZoneFragment : BaseFragment() {
     override val layoutRes = R.layout.fragment_hr_zone
     override val TAG = "HrZoneFragment"
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         hrZoneProgressBar?.initSizeOfCells(20)
 
         HrZone.values().forEachIndexed { index, hrZone ->
