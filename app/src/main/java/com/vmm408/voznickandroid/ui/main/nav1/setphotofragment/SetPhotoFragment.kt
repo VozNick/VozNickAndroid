@@ -22,10 +22,6 @@ import java.io.OutputStream
 enum class ChoosePhoto { CAMERA, GALLERY }
 
 class SetPhotoFragment : BaseFragment() {
-    companion object {
-        fun newInstance() = SetPhotoFragment()
-    }
-
     override val layoutRes = R.layout.fragment_set_photo_into_view
     override val TAG = "SetPhotoFragment"
 

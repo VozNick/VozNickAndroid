@@ -9,9 +9,9 @@ open class Base {
     @SerializedName("code")
     var code: Int? = null
 
-    @SerializedName("message")
-    var message: String? = null
-
     @SerializedName("title")
     var title: String? = null
+
+    @SerializedName("message")
+    var message: String? = null
 }

@@ -7,15 +7,11 @@ import com.vmm408.voznickandroid.ui.Screens
 import com.vmm408.voznickandroid.ui.global.BaseFragment
 
 class Nav1Host : BaseFragment() {
-    companion object {
-        fun newInstance() = Nav1Host()
-    }
-
     override val layoutRes = R.layout.host_nav_1
     override val TAG = "Nav1Host"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        replace(R.id.nav1Host, Screens.getHomeScreen())
+        replace(R.id.nav1Host, Screens.Nav1Host.getHomeScreen())
     }
 }

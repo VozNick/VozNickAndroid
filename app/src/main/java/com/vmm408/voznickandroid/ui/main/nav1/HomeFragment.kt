@@ -9,23 +9,18 @@ import com.vmm408.voznickandroid.ui.global.BaseFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 
 enum class FragmentList(val simpleName: String, val destination: BaseFragment) {
-    HR_ZONE_PROGRESS_BAR("HrZone Progress bar", Screens.getHrZoneScreen()),
-    SET_PHOTO_INTO_VIEW("Set photo into view", Screens.getSetPhotoScreen()),
-    ADD_GOOGLE_SIGN_IN("Add Google Sign In", Screens.getGoogleSignInScreen())
+    HR_ZONE_PROGRESS_BAR("HrZone Progress bar", Screens.Nav1Host.getHrZoneScreen()),
+    SET_PHOTO_INTO_VIEW("Set photo into view", Screens.Nav1Host.getSetPhotoScreen()),
+    SET_PHOTO_SAMPLE_TWO_INTO_VIEW("Set photo sample two into view", Screens.Nav1Host.getSetPhotoSampleTwoScreen()),
+    ADD_GOOGLE_SIGN_IN("Add Google Sign In", Screens.Nav1Host.getGoogleSignInScreen())
 }
 
 class HomeFragment : BaseFragment() {
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
-
     override val layoutRes = R.layout.fragment_home
     override val TAG = "HomeFragment"
 
     private val listAdapter: MainListAdapter by lazy {
-        MainListAdapter(activity, MainListAdapter.OnClickListener { dest ->
-            replace(android.R.id.content, dest)
-        })
+        MainListAdapter(activity) { destination -> replace(android.R.id.content, destination) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

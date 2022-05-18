@@ -6,8 +6,8 @@ import com.vmm408.voznickandroid.ui.global.API_INTERNET_ERROR
 interface BaseView {
     fun apiError(
         error: String = API_INTERNET_ERROR,
-        function: (() -> Unit)?,
-        apiException: Base? = null
+        apiException: Base? = null,
+        function: (() -> Unit)?
     ) {
     }
 

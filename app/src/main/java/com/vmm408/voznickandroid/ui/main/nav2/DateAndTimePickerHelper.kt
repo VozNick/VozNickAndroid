@@ -3,44 +3,41 @@ package com.vmm408.voznickandroid.ui.main.nav2
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.content.DialogInterface
 import java.util.*
 
 fun showCalendarAndTime(
     context: Context,
-    listener: (calendar: Calendar) -> Unit,
     calendar: Calendar = Calendar.getInstance(),
     is24HourView: Boolean = true,
     datePickerMinDateInMillis: Long? = null,
-    datePickerMaxDateInMillis: Long? = null
+    datePickerMaxDateInMillis: Long? = null,
+    function: (calendar: Calendar) -> Unit
 ) {
     showCalendar(
         context,
-        { c ->
-            showTime(
-                context,
-                { time -> listener(time) },
-                c,
-                is24HourView
-            )
-        },
         calendar,
         datePickerMinDateInMillis,
-        datePickerMaxDateInMillis
-    )
+        datePickerMaxDateInMillis,
+    ) { c ->
+        showTime(
+            context,
+            c,
+            is24HourView
+        ) { function(it) }
+    }
 }
 
 fun showCalendar(
     context: Context,
-    listener: (calendar: Calendar) -> Unit,
     calendar: Calendar = Calendar.getInstance(),
     datePickerMinDateInMillis: Long? = null,
     datePickerMaxDateInMillis: Long? = null,
+    function: (calendar: Calendar) -> Unit,
 ) {
     DatePickerDialog(
         context,
         { _, year, month, dayOfMonth ->
-            listener(Calendar.getInstance().apply {
+            function(Calendar.getInstance().apply {
                 set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 set(Calendar.MONTH, month)
                 set(Calendar.YEAR, year)
@@ -60,9 +57,9 @@ fun showCalendar(
 
 fun showTime(
     context: Context,
-    listener: (calendar: Calendar) -> Unit,
     calendar: Calendar = Calendar.getInstance(),
-    is24HourView: Boolean = true
+    is24HourView: Boolean = true,
+    function: (calendar: Calendar) -> Unit
 ) {
     TimePickerDialog(
         context,
@@ -71,7 +68,7 @@ fun showTime(
                 set(Calendar.HOUR_OF_DAY, hourOfDay)
                 set(Calendar.MINUTE, minute)
             }
-            listener(calendar)
+            function(calendar)
         },
         calendar[Calendar.HOUR_OF_DAY],
         calendar[Calendar.MINUTE],

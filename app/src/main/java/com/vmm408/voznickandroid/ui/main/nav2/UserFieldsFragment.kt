@@ -6,137 +6,214 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.children
+import com.google.android.material.card.MaterialCardView
 import com.vmm408.voznickandroid.R
+import com.vmm408.voznickandroid.model.CheckSampleOne
+import com.vmm408.voznickandroid.model.fillListWithData
+import com.vmm408.voznickandroid.ui.Screens
 import com.vmm408.voznickandroid.ui.global.BaseFragment
 import com.vmm408.voznickandroid.ui.global.dp
+import com.vmm408.voznickandroid.ui.global.randomInt
 import com.vmm408.voznickandroid.ui.global.setToStringFormat
 import kotlinx.android.synthetic.main.fragment_user_fields.*
 import kotlinx.android.synthetic.main.fragment_user_fields.rootView
 import kotlinx.android.synthetic.main.item_row_two_text_view_48.view.*
-import kotlinx.android.synthetic.main.view_alert_dialog_title_sample_one.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-enum class UserFieldCards(val label: String) {
-    CARD_0("Calendar"),
-    CARD_1("Time"),
-    CARD_2("Calendar and time"),
-    CARD_3("Simple list dropdown"),
-    CARD_4("One selection remember"),
-    CARD_5("Multi Selection Remember"),
-    CARD_6("List text"),
-    CARD_7("Int"),
+enum class UserFieldCardType { LABEL, CARD, SPACE }
+
+enum class UserFieldCards(val label: String, val type: UserFieldCardType) {
+    CALENDARS_LABEL("Calendars", UserFieldCardType.LABEL),
+    CALENDAR("Calendar", UserFieldCardType.CARD),
+    TIME("Time", UserFieldCardType.CARD),
+    CALENDAR_AND_TIME("Calendar and time", UserFieldCardType.CARD),
+    ALERTS_LABEL("ALERTS", UserFieldCardType.LABEL),
+    SIMPLE_LIST_DROPDOWN("Simple list dropdown", UserFieldCardType.CARD),
+    ONE_SELECTION_REMEMBER("One selection remember", UserFieldCardType.CARD),
+    MULTI_SELECTION_REMEMBER("Multi Selection Remember", UserFieldCardType.CARD),
+    SPACE_ONE("", UserFieldCardType.SPACE),
+    FRAGMENT_SELECTION("Fragment selection", UserFieldCardType.CARD),
+    FRAGMENT_SELECTION_WITH_SAVE("Fragment selection with save", UserFieldCardType.CARD),
+    FRAGMENT_SELECTION_WITH_SAVE_BOTTOM_SHEET(
+        "Fragment selection with save bottom sheet",
+        UserFieldCardType.CARD
+    ),
+    SPACE_TWO("", UserFieldCardType.SPACE),
+    NUMBER_PICKER_ONE("Number picker one", UserFieldCardType.CARD),
 }
 
 class UserFieldsFragment : BaseFragment() {
-    companion object {
-        fun newInstance() = UserFieldsFragment()
-    }
-
     override val layoutRes = R.layout.fragment_user_fields
     override val TAG = "UserFieldsFragment"
 
-    private var calendarMin = Calendar.getInstance().apply {
-        add(Calendar.DAY_OF_MONTH, -5)
-    }
-    private var calendarMax = Calendar.getInstance().apply {
-        add(Calendar.DAY_OF_MONTH, 5)
-    }
+    private var calendarMin = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -5) }
+    private var calendarMax = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, 5) }
     private var calendar = Calendar.getInstance()
     private var calendarAndTime = Calendar.getInstance()
 
     private var simpleList = arrayOf("Male", "Female")
+    private var simpleListSelected = -1
 
     private var singleSelectionList = Array(20) { "String $it" }
-    private var singleSelected = -1
+    private var singleListSelected = -1
 
     private var multiSelectionList = Array(20) { "String $it" }
-    private var multiSelectedList = BooleanArray(multiSelectionList.size)
+    private var multiListSelected = BooleanArray(multiSelectionList.size)
+
+    private val checkSampleOneList = fillListWithData()
+    private val checkSampleOneWithSaveList = fillListWithData()
+    private val checkSampleOneWithSaveBottomSheetList = fillListWithData()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         UserFieldCards.values().forEach { card ->
-            LayoutInflater.from(context)
-                .inflate(R.layout.item_row_two_text_view_48, rootView, false)
-                ?.apply {
-                    label?.text = card.label
-                    addClickListener(card)
-                    (layoutParams as? LinearLayout.LayoutParams)?.setMargins(
-                        18.dp, if (card.ordinal == 0) 40.dp else 8.dp, 18.dp, 0
-                    )
-                }?.also {
-                    mainContainer?.addView(it)
+            when (card.type) {
+                UserFieldCardType.LABEL -> {
+                    LayoutInflater.from(context)
+                        .inflate(R.layout.item_row_label_sample_one, rootView, false)
+                        ?.apply {
+                            id = card.ordinal
+                            label?.text = card.label
+                            (layoutParams as? FrameLayout.LayoutParams)?.setMargins(
+                                18.dp, 30.dp, 18.dp, 8.dp
+                            )
+                        }.also { mainContainer?.addView(it) }
                 }
+                UserFieldCardType.CARD -> {
+                    LayoutInflater.from(context)
+                        .inflate(R.layout.item_row_two_text_view_48, rootView, false)
+                        ?.apply {
+                            id = card.ordinal
+                            label?.text = card.label
+                            addClickListener(card)
+                            (layoutParams as? FrameLayout.LayoutParams)?.setMargins(
+                                18.dp,
+                                if (UserFieldCards.values()[card.ordinal - 1].type == UserFieldCardType.SPACE) 16.dp else 8.dp,
+                                18.dp,
+                                0
+                            )
+                        }?.also { mainContainer?.addView(it) }
+                }
+                else -> {
+                }
+            }
         }
 
-        testField?.setOnClickListener {
-            testField?.text = ArrayList<String>().apply {
-                multiSelectionList.forEachIndexed { index, s ->
-                    if (multiSelectedList[index]) add(s)
-                }
-            }.joinToString()
-        }
+//        testField?.setOnClickListener {
+//            testField?.text = ArrayList<String>().apply {
+//                checkSampleOneList.forEach { s ->
+//                    if (null != s.checkList?.firstOrNull { it.isChecked }) {
+//                        s.name?.let { n -> add(n) }
+//                    }
+//                }
+//            }.joinToString()
+//        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun View.addClickListener(card: UserFieldCards) {
         this.setOnClickListener {
             when (card) {
-                UserFieldCards.CARD_0 -> showCalendar(
-                    context,
-                    { c ->
+                UserFieldCards.CALENDAR -> {
+                    showCalendar(
+                        context,
+                        calendar,
+                        calendarMin.timeInMillis,
+                        calendarMax.timeInMillis
+                    ) { c ->
                         calendar = c
                         field?.text = c.time.setToStringFormat("dd MMMM yyyy")
-                    },
-                    calendar,
-                    datePickerMinDateInMillis = calendarMin.timeInMillis,
-                    datePickerMaxDateInMillis = calendarMax.timeInMillis
-                )
-                UserFieldCards.CARD_1 -> showTime(
-                    context,
-                    { c ->
+                    }
+                }
+                UserFieldCards.TIME -> {
+                    showTime(
+                        context,
+                        calendar
+                    ) { c ->
                         calendar = c
                         field?.text = c.time.setToStringFormat("HH:mm")
-                    },
-                    calendar
-                )
-                UserFieldCards.CARD_2 -> showCalendarAndTime(
-                    context,
-                    { c ->
+                    }
+                }
+                UserFieldCards.CALENDAR_AND_TIME -> {
+                    showCalendarAndTime(
+                        context,
+                        calendarAndTime
+                    ) { c ->
                         calendarAndTime = c
                         field?.text = c.time.setToStringFormat("HH:mm  dd MMMM yyyy")
-                    },
-                    calendarAndTime
-                )
-                UserFieldCards.CARD_3 -> showSimpleListDialog(context, simpleList) { _, p1 ->
-                    this.field?.text = simpleList[p1]
+                    }
                 }
-                UserFieldCards.CARD_4 -> showSingleRememberDialog(
-                    context,
-                    singleSelectionList,
-                    singleSelected
-                ) { p0, p1 ->
-                    this.field?.text = singleSelectionList[p1]
-                    p0.dismiss()
+                UserFieldCards.SIMPLE_LIST_DROPDOWN -> {
+                    showSimpleListDialog(
+                        context,
+                        simpleList
+                    ) { _, p1 ->
+                        simpleListSelected = p1
+                        this.field?.text = simpleList[p1]
+                    }
                 }
-                UserFieldCards.CARD_5 -> showMultiRememberDialog(
-                    context,
-                    "Multi selection",
-                    multiSelectionList,
-                    multiSelectedList
-                ) {
-                    multiSelectedList = it
-                    field?.text = ArrayList<String>().apply {
-                        multiSelectionList.forEachIndexed { index, s ->
-                            if (multiSelectedList[index]) add(s)
+                UserFieldCards.ONE_SELECTION_REMEMBER -> {
+                    showSingleRememberDialog(
+                        context,
+                        null,
+                        singleSelectionList,
+                        singleListSelected
+                    ) { p0 ->
+//                    this.field?.text = singleSelectionList[p1]
+////                    p0.dismiss()
+                    }
+                }
+                UserFieldCards.MULTI_SELECTION_REMEMBER -> {
+                    showMultiRememberDialog(
+                        context,
+                        "Multi selection",
+                        multiSelectionList,
+                        multiListSelected
+                    ) {
+                        multiListSelected = it
+                        field?.text = ArrayList<String>().apply {
+                            multiSelectionList.forEachIndexed { index, s ->
+                                if (multiListSelected[index]) add(s)
+                            }
+                        }.joinToString()
+                    }
+                }
+                UserFieldCards.FRAGMENT_SELECTION -> {
+                    add(android.R.id.content, Screens.Nav2Host.getCheckSampleOneScreen(checkSampleOneList) {
+                        field?.text = ArrayList<String>().apply {
+                            checkSampleOneList.forEach { s ->
+                                if (null != s.checkList?.firstOrNull { it.isChecked }) {
+                                    s.name?.let { n -> add(n) }
+                                }
+                            }
+                        }.joinToString()
+                    })
+                }
+                UserFieldCards.FRAGMENT_SELECTION_WITH_SAVE -> {
+                    add(
+                        android.R.id.content,
+                        Screens.Nav2Host.getCheckSampleOneWithSaveScreen(checkSampleOneWithSaveList) {
+                            field?.text = ArrayList<String>().apply {
+                                checkSampleOneWithSaveList.forEach { s ->
+                                    if (null != s.checkList?.firstOrNull { it.isChecked }) {
+                                        s.name?.let { n -> add(n) }
+                                    }
+                                }
+                            }.joinToString()
                         }
-                    }.joinToString()
+                    )
                 }
+                UserFieldCards.NUMBER_PICKER_ONE -> {
 
+                }
+                else -> {
+                }
 
 //                UserFieldCards.CARD_4 -> {
 //                    val list = Array(180) { it + 1 }
@@ -172,43 +249,17 @@ class UserFieldsFragment : BaseFragment() {
 //                        }
 //                    }, context
 //                )
+
             }
         }
     }
 
     private fun showSimpleListDialog(
-        context: Context?,
-        list: Array<String>,
-        listener: DialogInterface.OnClickListener,
-    ) {
-        context?.let {
-            AlertDialog.Builder(it)
-                .setItems(list, listener)
-                .create()
-                .show()
-        }
-    }
-
-    private fun showSingleRememberDialog(
         context: Context,
         list: Array<String>,
-        checkedPosition: Int,
-        listener: DialogInterface.OnClickListener
-    ) {
-        val adapter = ArrayAdapter(context, R.layout.item_row_checked_simple_text_view, list)
-        val alert = AlertDialog.Builder(context)
-            .setCustomTitle(
-                View.inflate(
-                    context,
-                    R.layout.view_alert_dialog_title_sample_one,
-                    null
-                )
-            )
-            .setSingleChoiceItems(adapter, checkedPosition, listener)
-            .create()
-        alert.window?.setBackgroundDrawableResource(R.drawable.background_alert_dialog_rounded_corners_8)
-        alert.show()
-    }
+        listener: DialogInterface.OnClickListener,
+    ) = AlertDialog.Builder(context).setItems(list, listener).create().show()
+
 
 //    private fun showSingleRememberWithSomeItemsDialog(
 //        context: Context,

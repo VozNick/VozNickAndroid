@@ -9,7 +9,10 @@ import com.vmm408.voznickandroid.R
 import com.vmm408.voznickandroid.ui.global.BaseFragment
 import kotlinx.android.synthetic.main.view_item_single_line.view.*
 
-class MainListAdapter(private val activity: Activity?, private val listener: OnClickListener) :
+class MainListAdapter(
+    private val activity: Activity?,
+    private val clickListener: (destination: BaseFragment) -> Unit
+) :
     RecyclerView.Adapter<MainListAdapter.Holder>() {
     private val list = FragmentList.values()
 
@@ -24,11 +27,7 @@ class MainListAdapter(private val activity: Activity?, private val listener: OnC
     inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(fragment: FragmentList) {
             itemView.title?.text = fragment.simpleName
-            itemView.setOnClickListener { listener.onClick(fragment.destination) }
+            itemView.setOnClickListener { clickListener(fragment.destination) }
         }
-    }
-
-    class OnClickListener(val clickListener: (destination: BaseFragment) -> Unit) {
-        fun onClick(destination: BaseFragment) = clickListener(destination)
     }
 }

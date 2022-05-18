@@ -2,47 +2,61 @@
     <!-- Base application theme. -->
     <style name="Theme.VozNickAndroid" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <!--        <item name="colorPrimary">@color/primaryColor</item>-->
+        <!--        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>-->
+        <!--        <item name="colorOnPrimary">@color/white</item>-->
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/secondaryColor</item>
-        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <!--        <item name="colorSecondary">@color/secondaryColor</item>-->
+        <!--        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>-->
+        <!--        <item name="colorOnSecondary">@color/black</item>-->
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/white</item>
+        <!--        <item name="android:statusBarColor">@color/white</item>-->
         <!-- Customize your theme here. -->
-        <item name="android:windowLightStatusBar">true</item>
+        <!--        <item name="android:windowLightStatusBar">true</item>-->
     </style>
 
-<!--    <style name="CustomBottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">-->
-<!--        <item name="android:background">@android:color/transparent</item>-->
-<!--        <item name="itemBackground">@android:color/transparent</item>-->
-<!--        <item name="itemTextAppearance">@style/BottomNavigationViewTextAppearance</item>-->
-<!--        <item name="itemTextAppearanceActive">@style/BottomNavigationViewTextAppearanceActive</item>-->
-<!--        <item name="labelVisibilityMode">labeled</item>-->
-<!--    </style>-->
+    <!--    <style name="CustomBottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">-->
+    <!--        <item name="android:background">@android:color/transparent</item>-->
+    <!--        <item name="itemBackground">@android:color/transparent</item>-->
+    <!--        <item name="itemTextAppearance">@style/BottomNavigationViewTextAppearance</item>-->
+    <!--        <item name="itemTextAppearanceActive">@style/BottomNavigationViewTextAppearanceActive</item>-->
+    <!--        <item name="labelVisibilityMode">labeled</item>-->
+    <!--    </style>-->
 
-<!--    <style name="BottomNavigationViewTextAppearance">-->
-<!--        <item name="android:textSize">10sp</item>-->
-<!--        <item name="android:textColor">@android:color/black</item>-->
-<!--        &lt;!&ndash;        <item name="android:fontFamily">@font/open_sans_semi_bold</item>&ndash;&gt;-->
-<!--    </style>-->
+    <!--    <style name="BottomNavigationViewTextAppearance">-->
+    <!--        <item name="android:textSize">10sp</item>-->
+    <!--        <item name="android:textColor">@android:color/black</item>-->
+    <!--        &lt;!&ndash;        <item name="android:fontFamily">@font/open_sans_semi_bold</item>&ndash;&gt;-->
+    <!--    </style>-->
 
-<!--    <style name="BottomNavigationViewTextAppearanceActive">-->
-<!--        <item name="android:textSize">10sp</item>-->
-<!--        <item name="android:textColor">@android:color/darker_gray</item>-->
-<!--        &lt;!&ndash;        <item name="android:fontFamily">@font/open_sans_semi_bold</item>&ndash;&gt;-->
-<!--    </style>-->
+    <!--    <style name="BottomNavigationViewTextAppearanceActive">-->
+    <!--        <item name="android:textSize">10sp</item>-->
+    <!--        <item name="android:textColor">@android:color/darker_gray</item>-->
+    <!--        &lt;!&ndash;        <item name="android:fontFamily">@font/open_sans_semi_bold</item>&ndash;&gt;-->
+    <!--    </style>-->
 
     <style name="CustomMaterialDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <!-- Background Color-->
-        <item name="android:background">@color/white</item>
+        <!--        <item name="android:background">@color/white</item>-->
         <!-- Text Color for title and message -->
         <!--        <item name="colorOnSurface">@color/text_black_231F20</item>-->
         <!-- Text Color for buttons -->
         <!--        <item name="colorPrimary">@color/text_red_logout_button_FF3B30</item>-->
         <!--        <item name="colorAccent">@color/text_black_231F20</item>-->
         <!--        <item name="colorButtonNormal">@color/text_black_231F20</item>-->
+    </style>
+
+    <style name="ExpandedToolbarTitleSampleOne">
+        <item name="android:textSize">60sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="textAllCaps">true</item>
+        <item name="titleEnabled">false</item>
+    </style>
+
+    <style name="CollapsedToolbarTitleSampleOne">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#F44336</item>
+        <item name="textAllCaps">true</item>
+        <item name="titleEnabled">true</item>
     </style>
 </resources>

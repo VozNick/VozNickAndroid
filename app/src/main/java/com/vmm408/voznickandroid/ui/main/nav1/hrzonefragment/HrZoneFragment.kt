@@ -13,10 +13,6 @@ import com.vmm408.voznickandroid.ui.global.widgets.HrZone
 import kotlinx.android.synthetic.main.fragment_hr_zone.*
 
 class HrZoneFragment : BaseFragment() {
-    companion object {
-        fun newInstance() = HrZoneFragment()
-    }
-
     override val layoutRes = R.layout.fragment_hr_zone
     override val TAG = "HrZoneFragment"
 

@@ -6,10 +6,6 @@ import com.vmm408.voznickandroid.R
 import com.vmm408.voznickandroid.ui.global.BaseFragment
 
 class AddGoogleSignInFragment : BaseFragment() {
-    companion object {
-        fun newInstance() = AddGoogleSignInFragment()
-    }
-
     override val layoutRes = R.layout.fragment_add_google_sign_in
     override val TAG = "AddGoogleSignInFragment"
 
