@@ -16,10 +16,10 @@ fun showSingleRememberDialog(
 ) {
     var tempCheckedPosition = checkedPosition
 
-    val adapter = ArrayAdapter(context, R.layout.item_row_check_box_sample_one, list)
+//    val adapter = ArrayAdapter(context, R.layout.item_row_check_box_sample_one, list)
     val alert = AlertDialog.Builder(context)
-//        .setCustomTitle(title)
-        .setSingleChoiceItems(adapter, tempCheckedPosition) { _, which ->
+        .setCustomTitle(title)
+        .setSingleChoiceItems(list, tempCheckedPosition) { _, which ->
             tempCheckedPosition = which
         }
         .setNegativeButton("Cancel") { dialog, _ ->

@@ -12,6 +12,6 @@ class Nav3Host : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        replace(R.id.nav3Host, Screens.Nav3Host.getCollapsingToolbarSampleOneScreen())
+        replace(R.id.nav3Host, Screens.Nav3.getCollapsingToolbarSampleOneScreen())
     }
 }

@@ -7,10 +7,12 @@
     android:orientation="vertical">
 
     <com.vmm408.voznickandroid.ui.global.widgets.NonSwipeableViewPager
-        android:id="@+id/hostViewPager"
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:isScrollContainer="false"
+        android:nestedScrollingEnabled="false" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"

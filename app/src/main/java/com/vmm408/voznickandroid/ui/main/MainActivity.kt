@@ -1,124 +1,137 @@
 package com.vmm408.voznickandroid.ui.main
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView
 import com.vmm408.voznickandroid.R
-import com.vmm408.voznickandroid.model.CheckSampleOne
 import com.vmm408.voznickandroid.ui.Screens
 import com.vmm408.voznickandroid.ui.global.BaseActivity
+import com.vmm408.voznickandroid.ui.global.BaseFragment
 import com.vmm408.voznickandroid.ui.global.ViewPagerAdapter
-import com.vmm408.voznickandroid.ui.main.nav2.UserFieldsFragment
-import com.vmm408.voznickandroid.ui.main.nav2.checksampleone.CheckSampleOneFragment
-import com.vmm408.voznickandroid.ui.main.nav2.checksampleone.SubCheckSampleOneFragment
-import com.vmm408.voznickandroid.ui.main.nav2.checksampleone.withsave.CheckSampleOneWithSaveFragment
-import com.vmm408.voznickandroid.ui.main.nav2.checksampleone.withsave.SubCheckSampleOneWithSaveFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener,
-    BottomNavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity() {
     override val layoutRes = R.layout.activity_main
 
-    private val adapter: ViewPagerAdapter = ViewPagerAdapter(supportFragmentManager).apply {
-        addFragment(Screens.Hosts.getNav1Host(), "")
-        addFragment(Screens.Hosts.getNav2Host(), "")
-        addFragment(Screens.Hosts.getNav3Host(), "")
-//        addFragment(Screens.Hosts.getNav4Host(), "")
+    private var pageAdapter = ViewPagerAdapter(supportFragmentManager).apply {
+        addFragment(Screens.Nav1.getHomeScreen(), "")
+        addFragment(Screens.Nav2.getUserFieldsScreen(), "")
+        addFragment(Screens.Nav3.getCollapsingToolbarSampleOneScreen(), "")
+//        addFragment(Screens.Hosts.getFeedHost(), "")
+    }
+
+    private val onPageChangeListener = object : ViewPager.OnPageChangeListener {
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
+        }
+
+        override fun onPageSelected(position: Int) {
+//            when (position) {
+//                0 -> (findFragment(HomeFragment().TAG) as? HomeFragment)?.updateHomeData()
+////                1 -> (findFragment(ClinicsFragment().TAG) as? ClinicsFragment)
+//                2 -> (findFragment(StoreFragment().TAG) as? StoreFragment)?.updateStoreData()
+//                3 -> (findFragment(FeedFragment().TAG) as? FeedFragment)?.updateFeedData()
+//            }
+        }
+
+        override fun onPageScrollStateChanged(state: Int) {
+        }
+    }
+
+    private val onNavigationItemListener = NavigationBarView.OnItemSelectedListener { item ->
+        when (item.itemId) {
+            R.id.nav1 -> viewPager?.currentItem = 0
+            R.id.nav2 -> viewPager?.currentItem = 1
+            R.id.nav3 -> viewPager?.currentItem = 2
+            R.id.nav4 -> viewPager?.currentItem = 3
+        }
+        true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        with(hostViewPager) {
-            this?.adapter = this@MainActivity.adapter
-            this?.addOnPageChangeListener(this@MainActivity)
-            this?.offscreenPageLimit = this@MainActivity.adapter.count
-        }
-        with(bottomNavigation) {
-            this?.setOnNavigationItemSelectedListener(this@MainActivity)
-        }
 
-        /** list of current fragments, ..just for testing **/
-        supportFragmentManager.addOnBackStackChangedListener {
-            println("** start **")
-            for (i in 0 until supportFragmentManager.backStackEntryCount) {
-                println(supportFragmentManager.getBackStackEntryAt(i).name.toString())
-            }
-            println("** end **")
-            println()
+        viewPager?.apply {
+            adapter = pageAdapter
+            offscreenPageLimit = pageAdapter.count
+            addOnPageChangeListener(onPageChangeListener)
         }
+        bottomNavigation?.setOnItemSelectedListener(onNavigationItemListener)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewPager?.removeOnPageChangeListener(onPageChangeListener)
     }
 
     override fun onBackPressed() {
         val sfm = supportFragmentManager
-        try {
-            if (sfm.backStackEntryCount > adapter.count) {
-                val first = sfm.fragments.lastOrNull()
-                when ((first?.view?.parent as ViewGroup).id) {
-                    R.id.nav1Host -> {
-                        if (hostViewPager?.currentItem == 0) {
-                            sfm.popBackStack()
-                        }
-                        hostViewPager?.currentItem = 0
+
+        if (sfm.backStackEntryCount > pageAdapter.count) {
+            val first = sfm.fragments.lastOrNull()
+            when ((first?.view?.parent as? ViewGroup)?.id) {
+                R.id.nav1 -> {
+                    if (viewPager?.currentItem == 0) {
+                        sfm.popBackStack()
                     }
-                    R.id.nav2Host -> {
-                        if (hostViewPager?.currentItem == 1) {
-                            sfm.popBackStack()
-                        }
-                        hostViewPager?.currentItem = 1
+                    viewPager?.currentItem = 0
+                }
+                R.id.nav2 -> {
+                    if (viewPager?.currentItem == 1) {
+                        sfm.popBackStack()
                     }
-                    R.id.nav3Host -> {
-                        if (hostViewPager?.currentItem == 2) {
-                            sfm.popBackStack()
-                        }
-                        hostViewPager?.currentItem = 2
+                    viewPager?.currentItem = 1
+                }
+                R.id.nav3 -> {
+                    if (viewPager?.currentItem == 2) {
+                        sfm.popBackStack()
                     }
-//                    R.id.nav4Host -> {
-//                        if (hostViewPager?.currentItem == 3) {
-//                            sfm.popBackStack()
-//                        }
-//                        hostViewPager?.currentItem = 3
-//                    }
-                    else -> when (sfm.getBackStackEntryAt(sfm.backStackEntryCount - 1).name) {
-//                        CheckSampleOneFragment().TAG -> {
-//                            (sfm.findFragmentByTag(UserFieldsFragment().TAG) as? UserFieldsFragment)?.updateCheckSampleOneCard()
-//                            sfm.popBackStack()
-//                        }
-//                        SubCheckSampleOneFragment().TAG -> {
-//                            (sfm.findFragmentByTag(CheckSampleOneFragment().TAG) as? CheckSampleOneFragment)?.updateAdapter()
-//                            sfm.popBackStack()
-//                        }
-//                        CheckSampleOneWithSaveFragment().TAG -> {
-//                            (sfm.findFragmentByTag(UserFieldsFragment().TAG) as? UserFieldsFragment)?.updateCheckSampleOneWithSaveCard()
-//                            sfm.popBackStack()
-//                        }
-//                        SubCheckSampleOneWithSaveFragment().TAG -> {
-//                            (sfm.findFragmentByTag(CheckSampleOneWithSaveFragment().TAG) as? CheckSampleOneWithSaveFragment)?.updateAdapter()
-//                            sfm.popBackStack()
-//                        }
+                    viewPager?.currentItem = 2
+                }
+                R.id.nav4 -> {
+                    if (viewPager?.currentItem == 3) {
+                        sfm.popBackStack()
+                    }
+                    viewPager?.currentItem = 3
+                }
+
+                else -> first?.tag.let {
+                    when (sfm.getBackStackEntryAt(sfm.backStackEntryCount - 1).name) {
+//                            "WorkoutVerticalVideoFragment" -> {
+//                                val oft =
+//                                    (sfm.findFragmentByTag("WorkoutVerticalVideoFragment") as WorkoutVerticalVideoFragment)
+//                                        .openFirstTime
+//                                if (oft) sfm.popBackStack()
+//                            }
+//                            "MultiplayerVerticalVideoFragment" -> {
+//                                val oft =
+//                                    (sfm.findFragmentByTag("MultiplayerVerticalVideoFragment") as MultiplayerVerticalVideoFragment)
+//                                        .openFirstTime
+//                                if (oft) sfm.popBackStack()
+//                            }
+//                            "FreestyleInProgressFragment" -> {
+//                            }
+//                            "InviteFragment" -> {
+//                                (sfm.findFragmentByTag("OnDemandFragment") as OnDemandFragment).checkInfoOnDemand()
+//                                sfm.popBackStack()
+//                            }
+//                            "WorkoutStartFragment" -> {
+//                                (sfm.findFragmentByTag("OnDemandFragment") as OnDemandFragment).checkInfoOnDemand()
+//                                sfm.popBackStack()
+//                            }
+//                            "WorkoutStartFragment" -> {
+//                                (sfm.findFragmentByTag("WorkoutPackInfoFragment") as WorkoutPackInfoFragment).getCategory()
+//                                sfm.popBackStack()
+//                            }
+//                            "WorkoutStartFragment" -> sfm.popBackStack()
                         else -> sfm.popBackStack()
                     }
                 }
-            } else finish()
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-            supportFragmentManager.popBackStack()
-        }
-    }
-
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
-    override fun onPageSelected(position: Int) {}
-
-    override fun onPageScrollStateChanged(state: Int) {}
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav1 -> hostViewPager?.currentItem = 0
-            R.id.nav2 -> hostViewPager?.currentItem = 1
-            R.id.nav3 -> hostViewPager?.currentItem = 2
-        }
-        return true
+            }
+        } else finish()
     }
 }

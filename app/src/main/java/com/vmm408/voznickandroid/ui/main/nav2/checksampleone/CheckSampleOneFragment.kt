@@ -62,7 +62,7 @@ class CheckSampleOneFragment : BaseFragment() {
 //                itemView.checkbox?.isSelected =
 //                    null != checkSampleOne.checkList?.firstOrNull { it.isChecked }
                 itemView.setOnClickListener {
-                    add(android.R.id.content, Screens.Nav2Host.getSubCheckSampleOneScreen(checkSampleOne) {
+                    add(android.R.id.content, Screens.Nav2.getSubCheckSampleOneScreen(checkSampleOne) {
                         notifyDataSetChanged()
                     })
                 }

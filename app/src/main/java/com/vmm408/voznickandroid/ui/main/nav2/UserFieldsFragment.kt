@@ -17,7 +17,6 @@ import com.vmm408.voznickandroid.model.fillListWithData
 import com.vmm408.voznickandroid.ui.Screens
 import com.vmm408.voznickandroid.ui.global.BaseFragment
 import com.vmm408.voznickandroid.ui.global.dp
-import com.vmm408.voznickandroid.ui.global.randomInt
 import com.vmm408.voznickandroid.ui.global.setToStringFormat
 import kotlinx.android.synthetic.main.fragment_user_fields.*
 import kotlinx.android.synthetic.main.fragment_user_fields.rootView
@@ -43,8 +42,12 @@ enum class UserFieldCards(val label: String, val type: UserFieldCardType) {
         "Fragment selection with save bottom sheet",
         UserFieldCardType.CARD
     ),
-    SPACE_TWO("", UserFieldCardType.SPACE),
+    NUM_PICKER_ALERTS_LABEL("NUM PICKER ALERTS", UserFieldCardType.LABEL),
     NUMBER_PICKER_ONE("Number picker one", UserFieldCardType.CARD),
+    STRING_PICKER_ONE("String picker one", UserFieldCardType.CARD),
+
+    MODAL_BOTTOM_SHEET_LABEL("MODAL BOTTOM SHEETS", UserFieldCardType.LABEL),
+    ADD_NUMBER_INCREASE_PICKER_MODAL_BOTTOM_SHEET("Number increase picker", UserFieldCardType.CARD)
 }
 
 class UserFieldsFragment : BaseFragment() {
@@ -68,6 +71,16 @@ class UserFieldsFragment : BaseFragment() {
     private val checkSampleOneList = fillListWithData()
     private val checkSampleOneWithSaveList = fillListWithData()
     private val checkSampleOneWithSaveBottomSheetList = fillListWithData()
+
+    private val numberPickerList = ArrayList<Int>().apply { for (i in 0..19) add(i) }
+    private var selectedNumberPickerValue = -1
+
+    private val stringPickerList = ArrayList<String>().apply { for (i in 0..19) add("String_$i") }
+    private var selectedStringPickerPosition = -1
+    private var selectedStringPickerValue = ""
+
+    private val numberPickerListRange = 0..30
+    private var currentNumberPickerValue = 20
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -165,8 +178,8 @@ class UserFieldsFragment : BaseFragment() {
                         singleSelectionList,
                         singleListSelected
                     ) { p0 ->
-//                    this.field?.text = singleSelectionList[p1]
-////                    p0.dismiss()
+                        singleListSelected = p0
+                        this.field?.text = singleSelectionList[p0]
                     }
                 }
                 UserFieldCards.MULTI_SELECTION_REMEMBER -> {
@@ -185,20 +198,22 @@ class UserFieldsFragment : BaseFragment() {
                     }
                 }
                 UserFieldCards.FRAGMENT_SELECTION -> {
-                    add(android.R.id.content, Screens.Nav2Host.getCheckSampleOneScreen(checkSampleOneList) {
-                        field?.text = ArrayList<String>().apply {
-                            checkSampleOneList.forEach { s ->
-                                if (null != s.checkList?.firstOrNull { it.isChecked }) {
-                                    s.name?.let { n -> add(n) }
+                    add(
+                        android.R.id.content,
+                        Screens.Nav2.getCheckSampleOneScreen(checkSampleOneList) {
+                            field?.text = ArrayList<String>().apply {
+                                checkSampleOneList.forEach { s ->
+                                    if (null != s.checkList?.firstOrNull { it.isChecked }) {
+                                        s.name?.let { n -> add(n) }
+                                    }
                                 }
-                            }
-                        }.joinToString()
-                    })
+                            }.joinToString()
+                        })
                 }
                 UserFieldCards.FRAGMENT_SELECTION_WITH_SAVE -> {
                     add(
                         android.R.id.content,
-                        Screens.Nav2Host.getCheckSampleOneWithSaveScreen(checkSampleOneWithSaveList) {
+                        Screens.Nav2.getCheckSampleOneWithSaveScreen(checkSampleOneWithSaveList) {
                             field?.text = ArrayList<String>().apply {
                                 checkSampleOneWithSaveList.forEach { s ->
                                     if (null != s.checkList?.firstOrNull { it.isChecked }) {
@@ -210,7 +225,38 @@ class UserFieldsFragment : BaseFragment() {
                     )
                 }
                 UserFieldCards.NUMBER_PICKER_ONE -> {
+                    showNumPicker(
+                        context,
+                        numberPickerList.toTypedArray(),
+                        selectedNumberPickerValue
+                    ) {
+                        selectedNumberPickerValue = it
+                        field?.text = it.toString()
 
+                    }
+                }
+                UserFieldCards.STRING_PICKER_ONE -> {
+                    showNumPicker(
+                        context,
+                        stringPickerList.toTypedArray(),
+                        selectedStringPickerPosition
+                    ) {
+                        selectedStringPickerPosition = it
+                        field?.text = stringPickerList[selectedStringPickerPosition]
+
+                    }
+                }
+                UserFieldCards.ADD_NUMBER_INCREASE_PICKER_MODAL_BOTTOM_SHEET -> {
+                    val picker = Screens.Nav2.getNumberIncreasePicker(
+                        numberPickerListRange,
+                        currentNumberPickerValue
+                    ) { newValue ->
+                        currentNumberPickerValue = newValue
+                        field?.text = "$newValue"
+                    }
+                    activity?.supportFragmentManager?.let { it1 ->
+                        picker.show(it1, NumberIncreaseModalBottomSheet().TAG)
+                    }
                 }
                 else -> {
                 }

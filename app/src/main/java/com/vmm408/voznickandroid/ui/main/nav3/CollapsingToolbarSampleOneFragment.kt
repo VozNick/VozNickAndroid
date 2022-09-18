@@ -16,7 +16,7 @@ class CollapsingToolbarSampleOneFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         appBarLayout?.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-            println("${verticalOffset}_____${appBarLayout.totalScrollRange}")
+//            println("${verticalOffset}_____${appBarLayout.totalScrollRange}")
 //            if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
 //                toolbar?.setBackgroundColor(context?.getColor(R.color.white) ?: 0)
 //                titleCollapsed?.text = "Tittle collapsed"
@@ -28,17 +28,17 @@ class CollapsingToolbarSampleOneFragment : BaseFragment() {
 //                extendedButton?.setTextColor(context?.getColor(R.color.white) ?: 0)
 //            }
 
-            (abs(verticalOffset) - appBarLayout.totalScrollRange == 0).let {
-                toolbar?.setBackgroundColor(if (it) context?.getColor(R.color.white) ?: 0 else 0)
-                titleCollapsed?.text = if (it) "Tittle collapsed" else ""
-                extendedButton?.setTextColor(
-                    if (it) context?.getColor(R.color.black) ?: 0
-                    else context?.getColor(R.color.white) ?: 0
-                )
-            }
+//            (abs(verticalOffset) - appBarLayout.totalScrollRange == 0).let {
+//                toolbar?.setBackgroundColor(if (it) context?.getColor(R.color.white) ?: 0 else 0)
+//                titleCollapsed?.text = if (it) "Tittle collapsed" else ""
+//                extendedButton?.setTextColor(
+//                    if (it) context?.getColor(R.color.black) ?: 0
+//                    else context?.getColor(R.color.white) ?: 0
+//                )
+//            }
         })
         extendedButton?.setOnClickListener {
-            replace(android.R.id.content, Screens.Nav3Host.getCollapsingToolbarSampleTwoScreen())
+            replace(android.R.id.content, Screens.Nav3.getCollapsingToolbarSampleTwoScreen())
         }
         titleExpanded?.text = "Title Expanded"
     }

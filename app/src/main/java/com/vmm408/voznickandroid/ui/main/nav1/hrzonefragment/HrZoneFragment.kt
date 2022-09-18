@@ -23,7 +23,9 @@ class HrZoneFragment : BaseFragment() {
         HrZone.values().forEachIndexed { index, hrZone ->
             TextView(context).apply {
                 setBackgroundColor(Color.parseColor(hrZone.zoneColor))
-                setOnClickListener { this@HrZoneFragment.hrZoneProgressBar?.redrawCurrentCell(hrZone) }
+                setOnClickListener {
+                    this@HrZoneFragment.hrZoneProgressBar?.redrawCurrentCell(hrZone)
+                }
 
                 this@HrZoneFragment.buttonContainer?.addView(this)
 

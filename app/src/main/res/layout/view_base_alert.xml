@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent">
@@ -20,15 +19,15 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/icon"
+                android:id="@+id/iconField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:textSize="30sp"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/titleField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -37,7 +36,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:id="@+id/subtitle"
+                android:id="@+id/subtitleField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -54,7 +53,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/negative"
+                    android:id="@+id/negativeButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -63,7 +62,7 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/positive"
+                    android:id="@+id/positiveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

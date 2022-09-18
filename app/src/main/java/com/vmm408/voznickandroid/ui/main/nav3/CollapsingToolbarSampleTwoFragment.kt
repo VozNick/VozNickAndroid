@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.google.android.material.appbar.AppBarLayout
 import com.vmm408.voznickandroid.R
 import com.vmm408.voznickandroid.ui.global.BaseFragment
-import kotlinx.android.synthetic.main.fragment_collapsing_toolbar_sample_one.*
+import kotlinx.android.synthetic.main.fragment_collapsing_toolbar_sample_two.*
 import kotlin.math.abs
 
 class CollapsingToolbarSampleTwoFragment : BaseFragment() {
@@ -15,12 +15,12 @@ class CollapsingToolbarSampleTwoFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         appBarLayout?.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-            println("${verticalOffset}_____${appBarLayout.totalScrollRange}")
+//            println("${verticalOffset}_____${appBarLayout.totalScrollRange}")
 
-            (abs(verticalOffset) - appBarLayout.totalScrollRange == 0).let {
-                toolbar?.setBackgroundColor(if (it) context?.getColor(R.color.white) ?: 0 else 0)
-                titleCollapsed?.text = if (it) "Tittle collapsed" else ""
-            }
+//            (abs(verticalOffset) - appBarLayout.totalScrollRange == 0).let {
+////                toolbar?.setBackgroundColor(if (it) context?.getColor(R.color.white) ?: 0 else 0)
+//                titleCollapsed?.text = if (it) "Tittle collapsed" else ""
+//            }
         })
     }
 }

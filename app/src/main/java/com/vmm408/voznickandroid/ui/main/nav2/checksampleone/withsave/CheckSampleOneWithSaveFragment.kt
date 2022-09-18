@@ -77,7 +77,7 @@ class CheckSampleOneWithSaveFragment : BaseFragment() {
                 itemView.setOnClickListener {
                     add(
                         android.R.id.content,
-                        Screens.Nav2Host.getSubCheckSampleOneWithSaveScreen(checkSampleOne) {
+                        Screens.Nav2.getSubCheckSampleOneWithSaveScreen(checkSampleOne) {
                             notifyItemChanged(adapterPosition)
                         }
                     )

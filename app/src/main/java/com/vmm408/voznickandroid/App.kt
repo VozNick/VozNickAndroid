@@ -46,6 +46,11 @@ class App : Application() {
             .installModules(AppModule(this))
     }
 
+    fun updateAppScope() {
+        KTP.closeScope(scope.name)
+        initAppScope()
+    }
+
     override fun onTerminate() {
         super.onTerminate()
         KTP.closeScope(scope.name)

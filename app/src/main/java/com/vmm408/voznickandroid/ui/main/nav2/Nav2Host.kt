@@ -12,6 +12,6 @@ class Nav2Host : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        replace(R.id.nav2Host, Screens.Nav2Host.getUserFieldsScreen())
+        replace(R.id.nav2Host, Screens.Nav2.getUserFieldsScreen())
     }
 }

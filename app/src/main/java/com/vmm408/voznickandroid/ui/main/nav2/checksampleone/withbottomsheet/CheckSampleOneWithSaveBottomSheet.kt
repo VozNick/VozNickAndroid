@@ -18,12 +18,12 @@ import com.vmm408.voznickandroid.R
 import com.vmm408.voznickandroid.model.CheckSampleOne
 import com.vmm408.voznickandroid.ui.Screens
 import com.vmm408.voznickandroid.ui.global.BaseBottomSheetFragment
-import com.vmm408.voznickandroid.ui.global.BaseFragment
 import kotlinx.android.synthetic.main.fragment_check_sample_one.*
 import kotlinx.android.synthetic.main.item_row_check_box_sample_one.view.*
 
 class CheckSampleOneWithSaveBottomSheet : BaseBottomSheetFragment() {
-    val TAG = "CheckSampleOneWithSaveBottomSheet"
+    override val layoutRes=R.layout.bottom_sheet_check_sample_one_with_save
+    override val TAG = "CheckSampleOneWithSaveBottomSheet"
 
     var list: ArrayList<CheckSampleOne>? = null
     var function: (() -> Unit)? = null
@@ -31,19 +31,10 @@ class CheckSampleOneWithSaveBottomSheet : BaseBottomSheetFragment() {
     private val tempList = ArrayList<CheckSampleOne>()
     private val checkSampleAdapter: CheckSampleOneWithSaveAdapter by lazy { CheckSampleOneWithSaveAdapter() }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        this.dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        return inflater.inflate(R.layout.bottom_sheet_check_sample_one_with_save, container, false)
-    }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initLayoutListener()
+//        initLayoutListener()
         backButton?.setOnClickListener { activity?.onBackPressed() }
         title?.text = ""
         saveButton?.apply {
@@ -119,7 +110,7 @@ class CheckSampleOneWithSaveBottomSheet : BaseBottomSheetFragment() {
                 itemView.setOnClickListener {
                     add(
                         android.R.id.content,
-                        Screens.Nav2Host.getSubCheckSampleOneWithSaveScreen(checkSampleOne) {
+                        Screens.Nav2.getSubCheckSampleOneWithSaveScreen(checkSampleOne) {
                             notifyItemChanged(adapterPosition)
                         }
                     )

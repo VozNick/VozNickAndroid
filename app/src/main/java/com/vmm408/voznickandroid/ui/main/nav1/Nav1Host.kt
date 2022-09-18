@@ -12,6 +12,6 @@ class Nav1Host : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        replace(R.id.nav1Host, Screens.Nav1Host.getHomeScreen())
+        replace(R.id.nav1Host, Screens.Nav1.getHomeScreen())
     }
 }

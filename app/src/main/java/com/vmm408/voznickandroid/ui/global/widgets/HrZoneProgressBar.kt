@@ -21,15 +21,16 @@ enum class HrZone(
     GREY(5, "ZONE 5", "under 60% of MAX HR", "#585960", 85..200)
 }
 
-private var itemCount = 0
-private var currentCell = 0
-private var currentHrZone: HrZone? = null
 
 class HrZoneProgressBarFragment : LinearLayout {
 
     constructor(context: Context?) : super(context!!)
 
     constructor(context: Context?, attrs: AttributeSet) : super(context!!, attrs)
+
+    private var itemCount = 0
+    private var currentCell = 0
+    private var currentHrZone: HrZone? = null
 
     fun initSizeOfCells(count: Int) {
         clearAllViews()

@@ -1,7 +1,6 @@
 package com.vmm408.voznickandroid.ui.global
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -11,52 +10,54 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.vmm408.voznickandroid.R
 import com.vmm408.voznickandroid.di.DI.APP_SCOPE
+import com.vmm408.voznickandroid.helper.AlertListener
+import com.vmm408.voznickandroid.helper.showBaseAlert
 import com.vmm408.voznickandroid.lifecycle.LifecycleObserver
+import com.vmm408.voznickandroid.model.LocalizationEvent
+import com.vmm408.voznickandroid.model.NetworkStateEvent
 import com.vmm408.voznickandroid.network.response.Base
-import com.vmm408.voznickandroid.ui.global.*
+import com.vmm408.voznickandroid.ui.getStatusBarHeight
 import com.vmm408.voznickandroid.ui.global.mvp.BaseView
 import com.vmm408.voznickandroid.ui.global.widgets.ActionButtonFragment
-import io.realm.Realm
-import kotlinx.android.synthetic.main.view_base_alert.*
-import kotlinx.android.synthetic.main.view_base_alert.view.*
+import com.vmm408.voznickandroid.ui.objectScopeName
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import toothpick.Scope
 import toothpick.Toothpick
 import toothpick.ktp.KTP
-import toothpick.ktp.delegate.inject
 
 abstract class BaseFragment : Fragment(), BaseView, LifecycleObserver {
     abstract val layoutRes: Int
     abstract val TAG: String
+
     protected open val parentScopeName: String by lazy {
         (parentFragment as? BaseFragment)?.fragmentScopeName ?: APP_SCOPE
     }
     private lateinit var fragmentScopeName: String
     protected lateinit var scope: Scope
         private set
-    protected val realm: Realm by inject()
+
     private var instanceStateSaved: Boolean = false
-    private var isAlertShowing = false
 
     private val delegate = object : LayoutChangeListener.Delegate {
         private val uiHandler = Handler(Looper.getMainLooper())
 
         override fun layoutDidChange(oldHeight: Int, newHeight: Int, tempBottom: Int) {
             uiHandler.post {
-                if (tempBottom <= resources.getDimension(R.dimen.navigation_height).toInt() ?: 82
-                ) {
-                    return@post
+                context?.resources?.getDimension(R.dimen.navigation_height)?.toInt()?.let {
+                    if (tempBottom <= it) return@post
                 }
                 keyboardStateChanged(newHeight > oldHeight)
             }
         }
     }
+
+    open fun keyboardStateChanged(isShown: Boolean) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         fragmentScopeName = savedInstanceState?.getString(STATE_SCOPE_NAME) ?: objectScopeName()
@@ -67,9 +68,12 @@ abstract class BaseFragment : Fragment(), BaseView, LifecycleObserver {
             installModules(scope)
         }
         Toothpick.inject(this, scope)
+
         lifecycle.addObserver(this)
         super.onCreate(savedInstanceState)
     }
+
+    protected open fun installModules(scope: Scope) {}
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,53 +83,66 @@ abstract class BaseFragment : Fragment(), BaseView, LifecycleObserver {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.addOnLayoutChangeListener(LayoutChangeListener().also {
-            it.delegate = delegate
-        })
-        view?.findViewById<ViewGroup>(R.id.rootView)?.setOnClickListener {
-            hideKeyboard()
-        }
+        view.addOnLayoutChangeListener(LayoutChangeListener().also { it.delegate = delegate })
+        view.findViewById<ViewGroup>(R.id.rootView)?.setOnClickListener { hideKeyboard() }
     }
 
+    override fun onStart() {
+        super.onStart()
+//        EventBus.getDefault().register(this)
+    }
 
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    open fun onMessageEvent(event: LogoutEvent?) {
-//        deleteUserDataAndLogOut()
-//    }
-//
-//    private fun deleteUserDataAndLogOut() {
-//        RealmHelper.realm?.where(Token::class.java)?.findAll()?.forEach { token ->
-//            RealmHelper.remove(arrayListOf(token))
-//        }
-//        RealmHelper.realm?.where(User::class.java)?.findAll()?.forEach { user ->
-//            RealmHelper.remove(arrayListOf(user))
-//        }
-//        userToken = null
-//        qrCode = null
-//
-//        RealmHelper.realm?.where(OpenFirstTime::class.java)?.findAll()?.forEach { time ->
-//            RealmHelper.remove(arrayListOf(time))
-//        }
-//
-//        RealmHelper.realm?.where(ConnectedDevice::class.java)?.findAll()?.forEach { time ->
-//            RealmHelper.remove(arrayListOf(time))
-//        }
-//
-//        context?.let {
-//            if (isGoogleSignedIn(it)) {
-//                getGoogleSignInClient(it).signOut()
-//                getGoogleSignInClient(it).revokeAccess()
-//            }
-//        }
-//
-//        startActivity(Intent(activity, SplashActivity::class.java))
-//        activity?.finish()
-//    }
+    override fun onResume() {
+        super.onResume()
+        instanceStateSaved = false
+    }
+
+    override fun connectListener() {
+        setLocalization()
+    }
+
+    open fun setLocalization() {}
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun disconnectListener() {}
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        instanceStateSaved = true
+        outState.putString(STATE_SCOPE_NAME, fragmentScopeName)
+    }
+
+    override fun onDestroyView() {
+        hideKeyboard()
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (needCloseScope()) KTP.closeScope(scope.name)
+    }
+
+    private fun needCloseScope(): Boolean = when {
+        activity?.isChangingConfigurations == true -> false
+        activity?.isFinishing == true -> true
+        else -> isRealRemoving()
+    }
+
+    private fun isRealRemoving(): Boolean =
+        isRemoving || (parentFragment as? BaseFragment)?.isRealRemoving() ?: false
 
     fun addTopMarginForFragment() {
-        context?.let {
+        context?.let { c ->
             (view?.layoutParams as? ViewGroup.MarginLayoutParams)?.topMargin =
-                getStatusBarHeight(it)
+                getStatusBarHeight(c)
         }
     }
 
@@ -145,70 +162,24 @@ abstract class BaseFragment : Fragment(), BaseView, LifecycleObserver {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        instanceStateSaved = true
-        outState.putString(STATE_SCOPE_NAME, fragmentScopeName)
-    }
-
-    override fun onStart() {
-        super.onStart()
-//        EventBus.getDefault().register(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        instanceStateSaved = false
-    }
-
-    override fun onStop() {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
-    }
-
-    override fun onDestroyView() {
-        hideKeyboard()
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (needCloseScope()) KTP.closeScope(scope.name)
-    }
-
-    private fun needCloseScope(): Boolean =
-        when {
-            activity?.isChangingConfigurations == true -> false
-            activity?.isFinishing == true -> true
-            else -> isRealRemoving()
-        }
-
-    private fun isRealRemoving(): Boolean =
-        isRemoving || (parentFragment as? BaseFragment)?.isRealRemoving() ?: false
-
-    protected open fun installModules(scope: Scope) {}
-
     protected fun replace(
-        @IdRes hostId: Int = android.R.id.content,
+        @IdRes hostId: Int,
         fragment: BaseFragment,
         isAddToBackStack: Boolean = true
-    ) {
-        val trans = activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(hostId, fragment, fragment.TAG)
-        trans?.setReorderingAllowed(true)
-        if (isAddToBackStack) {
-            trans?.addToBackStack(fragment.TAG)
-        }
-        trans?.commit()
-    }
+    ) = activity?.supportFragmentManager?.beginTransaction()
+        ?.replace(hostId, fragment, fragment.TAG)
+        ?.setReorderingAllowed(true)
+        ?.apply { if (isAddToBackStack) addToBackStack(fragment.TAG) }
+        ?.commit()
 
-    protected fun add(@IdRes hostId: Int = android.R.id.content, fragment: BaseFragment) {
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.add(hostId, fragment, fragment.TAG)
-            ?.addToBackStack(fragment.TAG)
-            ?.setReorderingAllowed(true)
-            ?.commit()
-    }
+    protected fun add(
+        @IdRes hostId: Int,
+        fragment: BaseFragment
+    ) = activity?.supportFragmentManager?.beginTransaction()
+        ?.add(hostId, fragment, fragment.TAG)
+        ?.setReorderingAllowed(true)
+        ?.addToBackStack(fragment.TAG)
+        ?.commit()
 
     protected fun finishFragment() = activity?.supportFragmentManager?.popBackStack()
 
@@ -224,62 +195,48 @@ abstract class BaseFragment : Fragment(), BaseView, LifecycleObserver {
 //    protected fun findToolbar(@IdRes id: Int = R.id.toolbarView): ToolbarFragment? =
 //        childFragmentManager.findFragmentById(id) as? ToolbarFragment
 
-    fun hideKeyboard() {
+    private fun hideKeyboard() {
         try {
-            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(activity?.window?.decorView?.windowToken, 0)
+            (activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)
+                ?.hideSoftInputFromWindow(activity?.window?.decorView?.windowToken, 0)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
     }
 
-    override fun connectListener() {}
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    open fun onMessageEvent(event: NetworkStateEvent) {
+    }
 
-    override fun disconnectListener() {}
-
-    open fun keyboardStateChanged(isShown: Boolean) {}
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    open fun onMessageEvent(event: LocalizationEvent) {
+        setLocalization()
+    }
 
     override fun apiError(error: String, apiException: Base?, function: (() -> Unit)?) {
-        if (isAlertShowing) return
         val listener = object : AlertListener {
             override fun actionPositive() {
-                isAlertShowing = false
                 function?.invoke()
             }
 
             override fun actionNegative() {
-                isAlertShowing = false
             }
         }
-        activity?.let { activity ->
-            when (error) {
-                API_INTERNET_ERROR -> DialogHelper.showBaseAlert(
-                    activity,
-                    title = apiException?.title,
-                    subtitle = getString(R.string.check_internet_connection),
-                    positiveText = getString(R.string.re_try),
-                    alertListener = listener
-                )
-                API_SERVER_ERROR -> {
-                    if (null == apiException?.message) {
-                        DialogHelper.showBaseAlert(
-                            activity,
-                            subtitle = apiException?.title,
-                            positiveText = getString(R.string.ok_label),
-                            alertListener = listener
-                        )
-                    } else {
-                        DialogHelper.showBaseAlert(
-                            activity,
-                            title = apiException.title,
-                            subtitle = apiException.message,
-                            positiveText = getString(R.string.ok_label),
-                            alertListener = listener
-                        )
-                    }
-                }
-            }
-            isAlertShowing = true
+        when (error) {
+            API_INTERNET_ERROR -> showBaseAlert(
+                context,
+                title = apiException?.title,
+                subtitle = getString(R.string.check_internet_connection),
+                positiveText = getString(R.string.re_try),
+                alertListener = listener
+            )
+            API_SERVER_ERROR -> showBaseAlert(
+                context,
+                title = apiException?.title,
+                subtitle = apiException?.message,
+                positiveText = getString(R.string.ok_label),
+                alertListener = listener
+            )
         }
     }
 }

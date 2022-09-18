@@ -2,17 +2,19 @@
     <!-- Base application theme. -->
     <style name="Theme.VozNickAndroid" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <!--        <item name="colorPrimary">@color/primaryColor</item>-->
-        <!--        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>-->
-        <!--        <item name="colorOnPrimary">@color/white</item>-->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
+        <item name="colorOnPrimary">@color/primaryLightColor</item>
         <!-- Secondary brand color. -->
-        <!--        <item name="colorSecondary">@color/secondaryColor</item>-->
-        <!--        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>-->
-        <!--        <item name="colorOnSecondary">@color/black</item>-->
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
+        <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <!--        <item name="android:statusBarColor">@color/white</item>-->
+        <item name="android:statusBarColor">@color/primaryDarkColor</item>
         <!-- Customize your theme here. -->
-        <!--        <item name="android:windowLightStatusBar">true</item>-->
+        <!--                <item name="android:windowLightStatusBar">true</item>-->
+
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Demo.BottomSheetDialog</item>
     </style>
 
     <!--    <style name="CustomBottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">-->
@@ -58,5 +60,19 @@
         <item name="android:textColor">#F44336</item>
         <item name="textAllCaps">true</item>
         <item name="titleEnabled">true</item>
+    </style>
+
+    <style name="ThemeOverlay.Demo.BottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.Demo.BottomSheet</item>
+    </style>
+
+    <style name="Widget.Demo.BottomSheet" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Demo</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.Demo" parent="">
+        <item name="cornerSizeTopLeft">13dp</item>
+        <item name="cornerSizeTopRight">13dp</item>
+        <item name="cornerFamily">rounded</item>
     </style>
 </resources>

@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootView"
+    android:background="@color/red_200"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="0dp"
+        android:background="@color/blue_400"
         app:elevation="0dp">
 
         <!--        <com.google.android.material.appbar.CollapsingToolbarLayout-->
@@ -29,6 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
+            app:statusBarScrim="@color/brown_600"
+            app:contentScrim="@color/yellow_A400"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:scrimAnimationDuration="0">
 
@@ -44,6 +48,7 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:textAllCaps="true"
+                    android:text="title"
                     android:textColor="#ffffff"
                     android:textSize="60sp" />
 
@@ -59,8 +64,9 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
+                android:background="@color/deep_purple_300"
+
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
                 app:contentInsetEnd="0dp"
                 app:contentInsetLeft="0dp"
                 app:contentInsetRight="0dp"
