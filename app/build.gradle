@@ -84,4 +84,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.4.1"
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 }

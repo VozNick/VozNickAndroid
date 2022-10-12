@@ -8,12 +8,14 @@ import com.vmm408.voznickandroid.R
 import kotlinx.android.synthetic.main.view_alert_dialog_title_sample_one.view.*
 
 fun showSingleRememberDialog(
-    context: Context,
+    context: Context?,
     title: String?,
     list: Array<String>,
     checkedPosition: Int,
     newCheckedPosition: (newCheckedPosition: Int) -> Unit
 ) {
+    if (null == context) return
+
     var tempCheckedPosition = checkedPosition
 
 //    val adapter = ArrayAdapter(context, R.layout.item_row_check_box_sample_one, list)

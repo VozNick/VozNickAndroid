@@ -1,13 +1,9 @@
 package com.vmm408.voznickandroid.ui.main.nav1
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.vmm408.voznickandroid.R
 import com.vmm408.voznickandroid.ui.Screens
 import com.vmm408.voznickandroid.ui.global.BaseFragment
@@ -21,9 +17,13 @@ enum class FragmentList(val simpleName: String, val destination: BaseFragment) {
         Screens.Nav1.getSetPhotoSampleTwoScreen()
     ),
     ADD_GOOGLE_SIGN_IN("Add Google Sign In", Screens.Nav1.getGoogleSignInScreen()),
-//    ADD_RECYCLER_ADAPTER("Add Recycler adapter", Screens.Nav1Host.)
 
     BAR_CHARTS("Bar charts", Screens.Nav1.getBarChartsScreen()),
+    OBSERVER_PATTERN("Observer pattern", Screens.Nav1.getObserverPatternScreen()),
+    ACTION_BUTTON("Action button", Screens.Nav1.getActionButtonScreen()),
+    CONVERT_LOCAL_TIME("Convert local time", Screens.Nav1.getConvertLocalTimeScreen()),
+    SHARED_PREFERENCES("Shared preferences", Screens.Nav1.getSharedPreferencesScreen()),
+    COROUTINE_TIMER("Coroutine timer", Screens.Nav1.getCoroutineTimerScreen())
 }
 
 class HomeFragment : BaseFragment() {
@@ -32,30 +32,17 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listContainer?.apply {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            adapter = MainListAdapter()
-        }
-    }
-
-    inner class MainListAdapter : RecyclerView.Adapter<MainListAdapter.Holder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = Holder(
-            LayoutInflater.from(context).inflate(R.layout.view_item_single_line, parent, false)
-        )
-
-        override fun onBindViewHolder(holder: Holder, position: Int) =
-            holder.bind(FragmentList.values()[position])
-
-        override fun getItemCount() = FragmentList.values().size
-
-        inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            fun bind(fragment: FragmentList) {
-                itemView.findViewById<TextView>(R.id.title)?.text = fragment.simpleName
-                itemView.setOnClickListener {
-                    replace(android.R.id.content, fragment.destination)
+        FragmentList.values().forEach { fragment ->
+            LayoutInflater.from(context).inflate(R.layout.view_item_single_line, rootView, false)
+                ?.apply {
+                    findViewById<TextView>(R.id.title)?.text = fragment.simpleName
+                    setOnClickListener {
+                        replace(android.R.id.content, fragment.destination)
+                    }
                 }
-            }
+                ?.also {
+                    rootView?.addView(it)
+                }
         }
     }
 }

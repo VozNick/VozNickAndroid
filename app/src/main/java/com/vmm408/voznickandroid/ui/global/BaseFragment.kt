@@ -92,6 +92,10 @@ abstract class BaseFragment : Fragment(), BaseView, LifecycleObserver {
 //        EventBus.getDefault().register(this)
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+    }
+
     override fun onResume() {
         super.onResume()
         instanceStateSaved = false
@@ -109,15 +113,15 @@ abstract class BaseFragment : Fragment(), BaseView, LifecycleObserver {
 
     override fun disconnectListener() {}
 
-    override fun onStop() {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         instanceStateSaved = true
         outState.putString(STATE_SCOPE_NAME, fragmentScopeName)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
     }
 
     override fun onDestroyView() {

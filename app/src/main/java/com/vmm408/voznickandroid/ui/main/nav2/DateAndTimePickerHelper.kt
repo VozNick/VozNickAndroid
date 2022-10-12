@@ -6,13 +6,15 @@ import android.content.Context
 import java.util.*
 
 fun showCalendarAndTime(
-    context: Context,
+    context: Context?,
     calendar: Calendar = Calendar.getInstance(),
     is24HourView: Boolean = true,
     datePickerMinDateInMillis: Long? = null,
     datePickerMaxDateInMillis: Long? = null,
     function: (calendar: Calendar) -> Unit
 ) {
+    if (null == context) return
+
     showCalendar(
         context,
         calendar,

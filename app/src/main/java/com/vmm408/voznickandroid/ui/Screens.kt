@@ -2,12 +2,17 @@ package com.vmm408.voznickandroid.ui
 
 import com.vmm408.voznickandroid.model.CheckSampleOne
 import com.vmm408.voznickandroid.ui.main.nav1.HomeFragment
+import com.vmm408.voznickandroid.ui.main.nav1.actionbutton.CustomActionButtonFragment
 import com.vmm408.voznickandroid.ui.main.nav2.NumberIncreaseModalBottomSheet
 import com.vmm408.voznickandroid.ui.main.nav1.adgooglesignin.AddGoogleSignInFragment
 import com.vmm408.voznickandroid.ui.main.nav1.charts.BarChartsWithTabsFragment
 import com.vmm408.voznickandroid.ui.main.nav1.hrzonefragment.HrZoneFragment
+import com.vmm408.voznickandroid.ui.main.nav1.localtime.ConvertLocalTimeFragment
+import com.vmm408.voznickandroid.ui.main.nav1.observerpattern.ObserverPatternFragment
 import com.vmm408.voznickandroid.ui.main.nav1.setphotofragment.SetPhotoFragment
 import com.vmm408.voznickandroid.ui.main.nav1.setphotosampletwofragment.SetPhotoSampleTwoFragment
+import com.vmm408.voznickandroid.ui.main.nav1.sharedPreferences.SharedPreferencesFragment
+import com.vmm408.voznickandroid.ui.main.nav1.timerandcoroutine.CoroutineTimerFragment
 import com.vmm408.voznickandroid.ui.main.nav2.checksampleone.CheckSampleOneFragment
 import com.vmm408.voznickandroid.ui.main.nav2.UserFieldsFragment
 import com.vmm408.voznickandroid.ui.main.nav2.checksampleone.withsave.CheckSampleOneWithSaveFragment
@@ -37,6 +42,11 @@ object Screens {
         fun getSetPhotoSampleTwoScreen() = SetPhotoSampleTwoFragment()
         fun getGoogleSignInScreen() = AddGoogleSignInFragment()
         fun getBarChartsScreen() = BarChartsWithTabsFragment()
+        fun getObserverPatternScreen() = ObserverPatternFragment()
+        fun getActionButtonScreen() = CustomActionButtonFragment()
+        fun getConvertLocalTimeScreen() = ConvertLocalTimeFragment()
+        fun getSharedPreferencesScreen() = SharedPreferencesFragment()
+        fun getCoroutineTimerScreen() = CoroutineTimerFragment()
     }
 
     object Nav2 {

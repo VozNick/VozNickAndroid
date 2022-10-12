@@ -21,6 +21,7 @@ import com.vmm408.voznickandroid.ui.global.setToStringFormat
 import kotlinx.android.synthetic.main.fragment_user_fields.*
 import kotlinx.android.synthetic.main.fragment_user_fields.rootView
 import kotlinx.android.synthetic.main.item_row_two_text_view_48.view.*
+import java.sql.Time
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -141,7 +142,8 @@ class UserFieldsFragment : BaseFragment() {
                         calendarMax.timeInMillis
                     ) { c ->
                         calendar = c
-                        field?.text = c.time.setToStringFormat("dd MMMM yyyy")
+                        field?.text =
+                            c.time.setToStringFormat("dd MMMM yyyy", TimeZone.getDefault().id)
                     }
                 }
                 UserFieldCards.TIME -> {
@@ -150,7 +152,7 @@ class UserFieldsFragment : BaseFragment() {
                         calendar
                     ) { c ->
                         calendar = c
-                        field?.text = c.time.setToStringFormat("HH:mm")
+                        field?.text = c.time.setToStringFormat("HH:mm", TimeZone.getDefault().id)
                     }
                 }
                 UserFieldCards.CALENDAR_AND_TIME -> {
@@ -159,7 +161,10 @@ class UserFieldsFragment : BaseFragment() {
                         calendarAndTime
                     ) { c ->
                         calendarAndTime = c
-                        field?.text = c.time.setToStringFormat("HH:mm  dd MMMM yyyy")
+                        field?.text = c.time.setToStringFormat(
+                            "HH:mm  dd MMMM yyyy",
+                            TimeZone.getDefault().id
+                        )
                     }
                 }
                 UserFieldCards.SIMPLE_LIST_DROPDOWN -> {
